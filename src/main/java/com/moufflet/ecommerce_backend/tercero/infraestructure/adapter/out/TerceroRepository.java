@@ -1,0 +1,9 @@
+package com.moufflet.ecommerce_backend.tercero.infraestructure.adapter.out;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.moufflet.ecommerce_backend.tercero.application.port.out.TerceroRepositoryPort;
+import com.moufflet.ecommerce_backend.tercero.domain.Tercero;
+
+public interface TerceroRepository extends JpaRepository<Tercero, String>, TerceroRepositoryPort {
+}
