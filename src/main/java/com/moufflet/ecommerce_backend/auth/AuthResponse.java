@@ -1,4 +1,4 @@
-package com.moufflet.ecommerce_backend.auth.jwt;
+package com.moufflet.ecommerce_backend.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginRequest {
-  private String username;
-  private String password;
+public class AuthResponse {
+  String token;
 }
