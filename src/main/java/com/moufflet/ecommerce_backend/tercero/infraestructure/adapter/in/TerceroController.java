@@ -11,8 +11,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class TerceroController {
 
-  @PostMapping("/register")
+  @PostMapping("/hola")
   public String createCliente() {
-    return "Tercero created";
+    return "Hola bro, sirve el spring security";
   }
 }

@@ -3,6 +3,7 @@ package com.moufflet.ecommerce_backend.auth;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -23,22 +24,22 @@ public class AuthService {
   private final AuthenticationManager authenticationManager;
 
   public AuthResponse login(LoginRequest request) {
-    authenticationManager
-        .authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
-    UserDetails user = terceroRepositoryPort.findByUsername(request.getUsername()).orElseThrow();
+    authenticationManager.authenticate(
+        new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+
+    UserDetails user = terceroRepositoryPort.findByUsername(request.getUsername())
+        .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
     String token = jwtService.getToken(user);
+    System.out.println("Generated Token: " + token); // Agregar log para el token generado
     return AuthResponse.builder()
         .token(token)
         .build();
   }
 
   public AuthResponse register(RegisterRequest request) {
-    if (request.getId() == null || request.getId().isEmpty()) {
-      throw new IllegalArgumentException("ID (cédula) no puede estar vacío");
-    }
-
     Tercero tercero = Tercero.builder()
-        .id(request.getId()) // Asegúrate de asignar el ID aquí
+        .id(request.getId())
         .username(request.getUsername())
         .password(passwordEncoder.encode(request.getPassword()))
         .email(request.getEmail())
