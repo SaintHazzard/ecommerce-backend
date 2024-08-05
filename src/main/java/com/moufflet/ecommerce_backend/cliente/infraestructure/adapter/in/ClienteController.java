@@ -1,5 +1,6 @@
 package com.moufflet.ecommerce_backend.cliente.infraestructure.adapter.in;
 
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,6 +14,11 @@ public class ClienteController {
 
   @PostMapping("/cliente")
   public String createCliente() {
+    return "Cliente created";
+  }
+
+  @GetMapping("/getCliente")
+  public String getCliente() {
     return "Cliente created";
   }
 }
