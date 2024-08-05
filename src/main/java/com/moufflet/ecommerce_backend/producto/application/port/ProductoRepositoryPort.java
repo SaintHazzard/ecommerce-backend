@@ -7,7 +7,7 @@ import com.moufflet.ecommerce_backend.producto.model.Producto;
 
 public interface ProductoRepositoryPort {
 
-  Producto Save(Producto producto);
+  Producto save(Producto producto);
 
   Optional<Producto> findById(Long id);
 
