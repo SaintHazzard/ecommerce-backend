@@ -41,7 +41,6 @@ public class ApplicationConfig {
 
   @Bean
   public UserDetailsService userDetailsService() {
-    System.out.println("Entra al userdetail");
     return username -> terceroRepositoryPort.findByUsername(username)
         .orElseThrow(() -> new RuntimeException("User not found"));
   }
