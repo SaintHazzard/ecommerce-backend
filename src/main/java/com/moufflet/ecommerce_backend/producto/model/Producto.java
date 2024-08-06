@@ -2,8 +2,6 @@ package com.moufflet.ecommerce_backend.producto.model;
 
 import java.math.BigDecimal;
 
-import java.math.BigDecimal;
-
 import com.moufflet.ecommerce_backend.gama.model.Gama;
 import com.moufflet.ecommerce_backend.proveedor.model.Proveedor;
 
