@@ -1,5 +1,11 @@
 package com.moufflet.ecommerce_backend.auth;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,7 +15,8 @@ import org.springframework.stereotype.Service;
 
 import com.moufflet.ecommerce_backend.auth.jwt.JwtService;
 import com.moufflet.ecommerce_backend.tercero.application.port.out.TerceroRepositoryPort;
-import com.moufflet.ecommerce_backend.tercero.domain.RolTercero;
+import com.moufflet.ecommerce_backend.tercero.domain.RolEnum;
+import com.moufflet.ecommerce_backend.tercero.domain.Rol;
 import com.moufflet.ecommerce_backend.tercero.domain.Tercero;
 
 import lombok.RequiredArgsConstructor;
@@ -31,7 +38,7 @@ public class AuthService {
         .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
     String token = jwtService.getToken(user);
-    System.out.println("Generated Token: " + token); // Agregar log para el token generado
+    System.out.println("Generated Token: " + token);
     return AuthResponse.builder()
         .token(token)
         .build();
@@ -46,7 +53,8 @@ public class AuthService {
         .primerNombre(request.getPrimerNombre())
         .primerApellido(request.getPrimerApellido())
         .telefono(request.getTelefono())
-        .rol(RolTercero.USER)
+        .roles(request.getRoles() != null ? request.getRoles().stream().collect(Collectors.toSet())
+            : Set.of(Rol.builder().name(RolEnum.USER).build()))
         .build();
 
     terceroRepositoryPort.save(tercero);

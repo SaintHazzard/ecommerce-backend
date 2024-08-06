@@ -2,6 +2,8 @@ package com.moufflet.ecommerce_backend.tercero.domain;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -11,9 +13,13 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -44,12 +50,16 @@ public class Tercero implements UserDetails {
   private String segundoApellido;
   @Column(nullable = false)
   private String telefono;
+
   @Enumerated(EnumType.STRING)
-  RolTercero rol;
+  @ManyToMany(fetch = FetchType.EAGER)
+  @JoinTable(name = "tercero_rol", joinColumns = @JoinColumn(name = "tercero_id"), inverseJoinColumns = @JoinColumn(name = "rol_id"))
+  private Set<Rol> roles;
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    return List.of(new SimpleGrantedAuthority((rol.name())));
+    return roles.stream()
+        .map(role -> new SimpleGrantedAuthority(role.getName().name())).collect(Collectors.toList());
   }
 
   @Override

@@ -1,5 +1,9 @@
 package com.moufflet.ecommerce_backend.auth;
 
+import java.util.Set;
+
+import com.moufflet.ecommerce_backend.tercero.domain.Rol;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,4 +21,5 @@ public class RegisterRequest {
   String primerNombre;
   String primerApellido;
   String telefono;
+  Set<Rol> roles;
 }

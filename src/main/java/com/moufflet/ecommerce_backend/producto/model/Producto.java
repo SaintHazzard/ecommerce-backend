@@ -1,10 +1,18 @@
 package com.moufflet.ecommerce_backend.producto.model;
 
+import java.math.BigDecimal;
+
+import java.math.BigDecimal;
+
+import com.moufflet.ecommerce_backend.gama.model.Gama;
+import com.moufflet.ecommerce_backend.proveedor.model.Proveedor;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,5 +33,11 @@ public class Producto {
   private String nombre;
   private String descripcion;
   @Column(precision = 15, scale = 2)
-  private Double precio;
+  private BigDecimal precio;
+
+  @ManyToOne
+  private Gama gama;
+
+  @ManyToOne
+  private Proveedor proveedor;
 }
