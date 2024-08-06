@@ -17,4 +17,6 @@ public interface ClienteRepositoryPort {
   Optional<Cliente> findByTelefono(String telefono);
 
   List<Cliente> findAll();
+
+  // List<Cliente> 
 }
