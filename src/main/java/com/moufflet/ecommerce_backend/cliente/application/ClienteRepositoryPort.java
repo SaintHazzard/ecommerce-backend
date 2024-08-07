@@ -18,5 +18,7 @@ public interface ClienteRepositoryPort {
 
   List<Cliente> findAll();
 
-  // List<Cliente> 
+  // List<Cliente>
+
+  List<Cliente> findByDireccionCiudadNombre(String nombre);
 }

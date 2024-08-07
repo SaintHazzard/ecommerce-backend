@@ -1,7 +1,7 @@
 package com.moufflet.ecommerce_backend.tercero.domain;
 
 import java.util.Collection;
-import java.util.Set;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -10,8 +10,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
@@ -35,7 +33,7 @@ public class Tercero implements UserDetails {
   @Id
   @Column(nullable = false, unique = true)
   private String id;
-  @Column(unique = true, nullable = false)
+  @Column(unique = true, nullable = true)
   private String username;
   // @Column(nullable = false)
   private String password;
@@ -50,15 +48,15 @@ public class Tercero implements UserDetails {
   @Column(nullable = false)
   private String telefono;
 
-  @Enumerated(EnumType.STRING)
   @ManyToMany(fetch = FetchType.EAGER)
   @JoinTable(name = "tercero_rol", joinColumns = @JoinColumn(name = "tercero_id"), inverseJoinColumns = @JoinColumn(name = "rol_id"))
-  private Set<Rol> roles;
+  private List<Role> roles;
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
     return roles.stream()
-        .map(role -> new SimpleGrantedAuthority(role.getName().name())).collect(Collectors.toList());
+        .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getName().name()))
+        .collect(Collectors.toList());
   }
 
   @Override
@@ -79,5 +77,9 @@ public class Tercero implements UserDetails {
   @Override
   public boolean isEnabled() {
     return true;
+  }
+
+  public Tercero(String id) {
+    this.id = id;
   }
 }

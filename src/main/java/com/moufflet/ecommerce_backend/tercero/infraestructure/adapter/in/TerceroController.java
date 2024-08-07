@@ -30,4 +30,12 @@ public class TerceroController {
   public List<Tercero> getAll() {
     return terceroService.getAll();
   }
+
+  // @PostMapping("/newCliente")
+  // public ResponseEntity<RegisterRequest> newCliente(@RequestBody
+  // RegisterRequest request) {
+  // terceroService.setNuevoCliente(request);
+  // return ResponseEntity.ok(request);
+  // }
+
 }
