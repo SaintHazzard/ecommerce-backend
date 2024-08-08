@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -44,5 +45,11 @@ public class ClienteController {
   public ResponseEntity<Cliente> createNewCliente(@RequestBody RegisterRequest request) {
     Cliente cliente = clienteService.register(request);
     return new ResponseEntity<>(cliente, HttpStatus.CREATED);
+  }
+
+  @DeleteMapping("/deleteCliente")
+  public ResponseEntity<String> deleteCliente(@RequestParam String id) {
+    clienteService.deleteById(id);
+    return new ResponseEntity<>("Cliente eliminado", HttpStatus.OK);
   }
 }
