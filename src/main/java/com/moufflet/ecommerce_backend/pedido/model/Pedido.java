@@ -3,6 +3,9 @@ package com.moufflet.ecommerce_backend.pedido.model;
 import java.sql.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -35,6 +38,7 @@ public class Pedido {
   private String comentarios;
 
   @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
-    private List<PedidoProducto> productos;
+  @JsonIgnore
+  private List<PedidoProducto> productos;
 
 }

@@ -1,17 +1,28 @@
 package com.moufflet.ecommerce_backend.pedido.infraestructure;
 
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.moufflet.ecommerce_backend.pedido.application.PedidoDTO;
 import com.moufflet.ecommerce_backend.pedido.application.PedidoRequest;
 import com.moufflet.ecommerce_backend.pedido.application.PedidoService;
 import com.moufflet.ecommerce_backend.pedido.model.Pedido;
 import com.moufflet.ecommerce_backend.pedido.model.PedidoProducto;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/admin/pedido")
@@ -22,14 +33,19 @@ public class PedidoController {
 
   @PostMapping("/crear")
   public ResponseEntity<Pedido> createPedido(@RequestBody PedidoRequest pedidoRequest) {
+    System.out.println(pedidoRequest);
     Pedido savedPedido = pedidoService.createPedido(pedidoRequest.getPedido(), pedidoRequest.getProductos());
     return new ResponseEntity<>(savedPedido, HttpStatus.CREATED);
   }
 
   @GetMapping("/getAll")
-  public ResponseEntity<List<Pedido>> getAllPedidos() {
+  public ResponseEntity<List<PedidoDTO>> getAllPedidos() {
     List<Pedido> pedidos = pedidoService.getAllPedidos();
-    return new ResponseEntity<>(pedidos, HttpStatus.OK);
+    List<PedidoDTO> pedidosDTO = pedidos.stream()
+        .map(pedido -> new PedidoDTO(pedido.getId(), pedido.getFechaPedido(), pedido.getFechaEsperada(),
+            pedido.getFechaEntrega(), pedido.getEstado(), pedido.getComentarios()))
+        .collect(Collectors.toList());
+    return new ResponseEntity<>(pedidosDTO, HttpStatus.OK);
   }
 
   @GetMapping("/get/{id}")
@@ -45,8 +61,8 @@ public class PedidoController {
     return new ResponseEntity<>(updatedPedido, HttpStatus.OK);
   }
 
-  @DeleteMapping("/delete/{id}")
-  public ResponseEntity<Void> deletePedido(@PathVariable Long id) {
+  @DeleteMapping("/delete")
+  public ResponseEntity<Void> deletePedido(@RequestParam Long id) {
     pedidoService.deletePedido(id);
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }

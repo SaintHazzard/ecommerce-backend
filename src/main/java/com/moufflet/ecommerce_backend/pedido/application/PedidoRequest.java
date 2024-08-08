@@ -2,8 +2,8 @@ package com.moufflet.ecommerce_backend.pedido.application;
 
 import java.util.List;
 
-import com.moufflet.ecommerce_backend.pedido.model.Pedido;
-import com.moufflet.ecommerce_backend.pedido.model.PedidoProducto;
+
+import com.moufflet.ecommerce_backend.pedido.model.PedidoProductoDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PedidoRequest {
-  private Pedido pedido;
-  private List<PedidoProducto> productos;
+  private PedidoDTO pedido;
+  private List<PedidoProductoDTO> productos;
 
 }
