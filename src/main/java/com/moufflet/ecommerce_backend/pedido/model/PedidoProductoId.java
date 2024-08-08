@@ -12,6 +12,6 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PedidoProductoId implements Serializable {
-  private Long pedidoId;
-  private Long productoId;
+  private Long pedido;
+  private Long producto;
 }
