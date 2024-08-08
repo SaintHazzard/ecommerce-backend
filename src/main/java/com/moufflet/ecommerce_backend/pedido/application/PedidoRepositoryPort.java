@@ -14,4 +14,6 @@ public interface PedidoRepositoryPort {
 
   void deleteById(Long id);
 
+  List<Pedido> findByEstado(String estado);
+
 }

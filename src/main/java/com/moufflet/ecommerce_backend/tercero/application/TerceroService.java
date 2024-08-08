@@ -54,5 +54,4 @@ public class TerceroService {
     return terceroRepositoryPort.findAll();
   }
 
-
 }

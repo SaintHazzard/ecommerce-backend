@@ -28,10 +28,12 @@ public class ProductoController {
   private ProductoService productoService;
 
   @PostMapping("/crear")
-  public ResponseEntity<Producto> createProduct(@RequestPart("producto") ProductoDTO productoDTO,
-      @RequestPart("imagen") MultipartFile imagen) throws IOException {
-    productoService.createProducto(productoDTO, imagen);
-    return new ResponseEntity<>(HttpStatus.CREATED);
+  public ResponseEntity<Producto> createProducto(
+      @RequestPart("producto") ProductoDTO productoDTO,
+      @RequestPart(value = "imagen", required = false) MultipartFile imagen) throws IOException {
+    System.out.println("ProductoDTO: " + productoDTO);
+    System.out.println("Imagen: " + (imagen != null ? imagen.getOriginalFilename() : "No imagen"));
+    return productoService.createProducto(productoDTO, imagen);
   }
 
   @GetMapping("/getAll")

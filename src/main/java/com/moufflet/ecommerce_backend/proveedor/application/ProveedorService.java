@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.moufflet.ecommerce_backend.proveedor.application.port.ProveedorRepositoryPort;
 import com.moufflet.ecommerce_backend.proveedor.model.Proveedor;
+import com.moufflet.ecommerce_backend.proveedor.model.ProveedorDTO;
 
 @Service
 public class ProveedorService {
@@ -26,8 +27,17 @@ public class ProveedorService {
     proveedorRepositoryPort.deleteById(id);
   }
 
-  public List<Proveedor> findAll() {
-    return proveedorRepositoryPort.findAll();
+  public List<ProveedorDTO> findAll() {
+    List<Proveedor> proveedores = proveedorRepositoryPort.findAll();
+    return proveedores.stream().map(this::convertToDto).toList();
+  }
+
+  public ProveedorDTO convertToDto(Proveedor proveedor) {
+    return ProveedorDTO.builder()
+        .id(proveedor.getId())
+        .nombre(proveedor.getPrimerNombre() + proveedor.getPrimerApellido() + proveedor.getSegundoApellido())
+        .descripcion(proveedor.getDescripcion())
+        .build();
   }
 
 }

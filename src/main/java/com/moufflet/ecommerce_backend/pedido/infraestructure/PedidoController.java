@@ -1,5 +1,6 @@
 package com.moufflet.ecommerce_backend.pedido.infraestructure;
 
+import com.moufflet.ecommerce_backend.pedido.application.PedidoRequest;
 import com.moufflet.ecommerce_backend.pedido.application.PedidoService;
 import com.moufflet.ecommerce_backend.pedido.model.Pedido;
 import com.moufflet.ecommerce_backend.pedido.model.PedidoProducto;
@@ -20,8 +21,8 @@ public class PedidoController {
   private PedidoService pedidoService;
 
   @PostMapping("/crear")
-  public ResponseEntity<Pedido> createPedido(@RequestBody Pedido pedido, @RequestBody List<PedidoProducto> productos) {
-    Pedido savedPedido = pedidoService.createPedido(pedido, productos);
+  public ResponseEntity<Pedido> createPedido(@RequestBody PedidoRequest pedidoRequest) {
+    Pedido savedPedido = pedidoService.createPedido(pedidoRequest.getPedido(), pedidoRequest.getProductos());
     return new ResponseEntity<>(savedPedido, HttpStatus.CREATED);
   }
 
@@ -55,5 +56,11 @@ public class PedidoController {
       @RequestParam int cantidad, @RequestParam BigDecimal precio) {
     PedidoProducto pedidoProducto = pedidoService.addProductoToPedido(pedidoId, productoId, cantidad, precio);
     return new ResponseEntity<>(pedidoProducto, HttpStatus.CREATED);
+  }
+
+  @GetMapping("/getAllByState")
+  public ResponseEntity<List<Pedido>> getAllPedidosByState(@RequestParam String estado) {
+    List<Pedido> pedidos = pedidoService.getAllPedidosByState(estado.toLowerCase());
+    return new ResponseEntity<>(pedidos, HttpStatus.OK);
   }
 }

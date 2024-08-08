@@ -6,6 +6,8 @@ import com.moufflet.ecommerce_backend.pedido.model.PedidoProductoId;
 
 import com.moufflet.ecommerce_backend.producto.model.Producto;
 
+import jakarta.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +29,7 @@ public class PedidoService {
   @Autowired
   private PedidoProductoRepositoryPort pedidoProductoRepository;
 
+  @Transactional
   public Pedido createPedido(Pedido pedido, List<PedidoProducto> productos) {
     Pedido savedPedido = pedidoRepository.save(pedido);
     for (PedidoProducto pedidoProducto : productos) {
@@ -75,5 +78,9 @@ public class PedidoService {
     PedidoProducto pedidoProducto = new PedidoProducto(pedidoProductoId, pedido, producto, cantidad, precio);
 
     return pedidoProductoRepository.save(pedidoProducto);
+  }
+
+  public List<Pedido> getAllPedidosByState(String estado) {
+    return pedidoRepository.findByEstado(estado);
   }
 }

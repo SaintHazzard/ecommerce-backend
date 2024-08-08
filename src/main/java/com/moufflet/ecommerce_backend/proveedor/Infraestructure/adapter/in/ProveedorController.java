@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.moufflet.ecommerce_backend.proveedor.application.ProveedorService;
-import com.moufflet.ecommerce_backend.proveedor.model.Proveedor;
+import com.moufflet.ecommerce_backend.proveedor.model.ProveedorDTO;
 
 @RequestMapping("/admin/proveedor")
 @RestController
@@ -18,7 +18,7 @@ public class ProveedorController {
   private ProveedorService proveedorService;
 
   @GetMapping("/getAll")
-  public List<Proveedor> getAllProveedor() {
+  public List<ProveedorDTO> getAllProveedor() {
     return proveedorService.findAll();
   }
 

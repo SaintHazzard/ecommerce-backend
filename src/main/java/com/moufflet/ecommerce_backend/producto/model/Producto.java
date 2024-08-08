@@ -45,7 +45,7 @@ public class Producto {
   private Proveedor proveedor;
 
   @Lob
-  @Column(name = "imagen", columnDefinition = "BLOB")
+  @Column(name = "imagen", columnDefinition = "LONGBLOB")
   private byte[] imagen;
 
   private boolean estado;
