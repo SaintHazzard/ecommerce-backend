@@ -5,8 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.moufflet.ecommerce_backend.auth.AuthService;
-import com.moufflet.ecommerce_backend.cliente.application.ClienteService;
 import com.moufflet.ecommerce_backend.tercero.application.port.out.TerceroRepositoryPort;
 import com.moufflet.ecommerce_backend.tercero.domain.Tercero;
 
@@ -16,11 +14,7 @@ public class TerceroService {
   @Autowired
   private TerceroRepositoryPort terceroRepositoryPort;
 
-  @Autowired
-  private ClienteService clienteService;
 
-  @Autowired
-  private AuthService authService;
 
   public Tercero save(Tercero tercero) {
     return terceroRepositoryPort.save(tercero);

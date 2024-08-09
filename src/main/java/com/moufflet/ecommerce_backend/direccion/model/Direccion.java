@@ -1,6 +1,7 @@
 package com.moufflet.ecommerce_backend.direccion.model;
 
 import com.moufflet.ecommerce_backend.ciudad.model.Ciudad;
+import com.moufflet.ecommerce_backend.cliente.domain.Cliente;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -36,8 +37,8 @@ public class Direccion {
   @Column(nullable = false)
   private String codigoPostal;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(nullable = false)
+  @ManyToOne
+  @JoinColumn(name = "ciudad_id", nullable = false)
   private Ciudad ciudad;
 
 }

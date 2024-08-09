@@ -22,14 +22,12 @@ import lombok.NoArgsConstructor;
 public class Ciudad {
 
   @Id
-  @JsonProperty("cod_mpio")
   @Column(length = 10)
   private String id;
   @Column(length = 30)
-  @JsonProperty("nom_mpio")
   private String nombre;
 
   @OneToMany
-  private List<Direccion> direcciones;
+  private List<Direccion> direccion;
 
 }

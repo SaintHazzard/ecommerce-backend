@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.moufflet.ecommerce_backend.pedido.model.EstadoPedido;
 import com.moufflet.ecommerce_backend.pedido.model.Pedido;
 import com.moufflet.ecommerce_backend.pedido.model.PedidoProducto;
 import com.moufflet.ecommerce_backend.pedido.model.PedidoProductoDTO;
@@ -89,7 +90,7 @@ public class PedidoService {
         .fechaPedido(pedidoDTO.getFechaPedido())
         .fechaEsperada(pedidoDTO.getFechaEsperada())
         .fechaEntrega(pedidoDTO.getFechaEntrega())
-        .estado(pedidoDTO.getEstado())
+        .estado(EstadoPedido.valueOf(pedidoDTO.getEstado()))
         .comentarios(pedidoDTO.getComentarios())
         .build();
   }
@@ -104,5 +105,8 @@ public class PedidoService {
         .build();
   }
 
-  
+  private List<Pedido> getPedidoByEstado(String estado) {
+    return pedidoRepository.findByEstado(estado);
+  }
+
 }

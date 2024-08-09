@@ -1,7 +1,5 @@
 package com.moufflet.ecommerce_backend.pedido.model;
 
-import java.math.BigDecimal;
-
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.moufflet.ecommerce_backend.producto.model.Producto;
 

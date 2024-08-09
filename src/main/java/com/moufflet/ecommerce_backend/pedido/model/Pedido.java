@@ -4,10 +4,11 @@ import java.sql.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -33,12 +34,12 @@ public class Pedido {
 
   private Date fechaEntrega;
 
-  private String estado;
+  @Enumerated(EnumType.STRING)
+  private EstadoPedido estado;
 
   private String comentarios;
 
   @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
   @JsonIgnore
   private List<PedidoProducto> productos;
-
 }

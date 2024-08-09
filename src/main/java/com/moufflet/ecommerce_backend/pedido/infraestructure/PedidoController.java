@@ -43,7 +43,7 @@ public class PedidoController {
     List<Pedido> pedidos = pedidoService.getAllPedidos();
     List<PedidoDTO> pedidosDTO = pedidos.stream()
         .map(pedido -> new PedidoDTO(pedido.getId(), pedido.getFechaPedido(), pedido.getFechaEsperada(),
-            pedido.getFechaEntrega(), pedido.getEstado(), pedido.getComentarios()))
+            pedido.getFechaEntrega(), pedido.getEstado().name(), pedido.getComentarios()))
         .collect(Collectors.toList());
     return new ResponseEntity<>(pedidosDTO, HttpStatus.OK);
   }
@@ -78,5 +78,15 @@ public class PedidoController {
   public ResponseEntity<List<Pedido>> getAllPedidosByState(@RequestParam String estado) {
     List<Pedido> pedidos = pedidoService.getAllPedidosByState(estado.toLowerCase());
     return new ResponseEntity<>(pedidos, HttpStatus.OK);
+  }
+
+  @GetMapping("/getAllByEstado")
+  public ResponseEntity<List<PedidoDTO>> getAllPedidos(@RequestParam String estado) {
+    List<Pedido> pedidos = pedidoService.getAllPedidosByState(estado);
+    List<PedidoDTO> pedidosDTO = pedidos.stream()
+        .map(pedido -> new PedidoDTO(pedido.getId(), pedido.getFechaPedido(), pedido.getFechaEsperada(),
+            pedido.getFechaEntrega(), pedido.getEstado().name(), pedido.getComentarios()))
+        .collect(Collectors.toList());
+    return new ResponseEntity<>(pedidosDTO, HttpStatus.OK);
   }
 }
