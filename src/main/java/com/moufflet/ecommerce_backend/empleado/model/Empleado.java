@@ -25,6 +25,7 @@ public class Empleado extends Tercero {
   @ManyToOne
   private Oficina oficina;
 
+  @ManyToOne
   private Empleado jefe;
 
 }

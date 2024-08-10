@@ -12,9 +12,9 @@ public interface EmpleadoRepositoryPort {
 
   List<Empleado> findAll();
 
-  List<Empleado> findAllByJefeNombre(String nombre);
+  List<Empleado> findAllByJefe_PrimerNombre(String nombre);
 
-  List<Empleado> findAllByJefeId(String nombre);
+  List<Empleado> findAllByJefeId(String id);
 
   void deleteById(String id);
 
@@ -24,10 +24,9 @@ public interface EmpleadoRepositoryPort {
 
   Empleado findByOficinaId(Long oficinaId);
 
-  List<Empleado> findByOficinaCiudadNombre(String ciudad);
+  List<Empleado> findByOficinaDireccionCiudadNombre(String ciudad);
 
   List<Empleado> findByOficinaNombre(String nombre);
 
   List<Empleado> findByRol(String rol);
-
 }

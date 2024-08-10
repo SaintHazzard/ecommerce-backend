@@ -19,4 +19,7 @@ public interface DireccionRepositoryPort {
   List<Direccion> findAll();
 
   List<Direccion> findByCiudadNombre(String provinciaNombre);
+
+  Optional<Direccion> findByTipoCalleAndNombreCalleAndNumeroCalleAndNumeroComplementoAndCiudadId(
+      String tipoCalle, String nombreCalle, String numeroCalle, String numeroComplemento, String ciudadId);
 }

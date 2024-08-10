@@ -1,6 +1,7 @@
 package com.moufflet.ecommerce_backend.tercero.domain;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -54,6 +55,10 @@ public class Tercero implements UserDetails {
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
+    if (roles == null) {
+      System.out.println("Roles es null");
+      return Collections.emptyList();
+    }
     return roles.stream()
         .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getName().name()))
         .collect(Collectors.toList());

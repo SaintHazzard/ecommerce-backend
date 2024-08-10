@@ -18,24 +18,30 @@ public class OficinaController {
   @Autowired
   private OficinaService oficinaService;
 
-  @PostMapping("/crear")
+  @PostMapping("/create")
   public ResponseEntity<Oficina> crearOficina(@RequestBody Oficina oficina) {
     return ResponseEntity.ok(oficinaService.save(oficina));
   }
 
-  @GetMapping("/buscar")
+  @GetMapping("/getAll")
+  public ResponseEntity<Iterable<Oficina>> getAllOficinas() {
+    return ResponseEntity.ok(oficinaService.getAllOficinas());
+  }
+
+  @GetMapping("/getById")
   public ResponseEntity<Oficina> buscarOficina(@RequestParam Long id) {
     return ResponseEntity.ok(oficinaService.getById(id));
   }
 
-  @GetMapping("/borrar")
+  @GetMapping("/delete")
   public ResponseEntity<Void> borrarOficina(@RequestParam Long id) {
     oficinaService.deleteById(id);
     return ResponseEntity.ok().build();
   }
 
-  @GetMapping("/buscarPorCiudad")
+  @GetMapping("/getByCiudad")
   public ResponseEntity<Oficina> buscarOficinaPorCiudad(@RequestParam String ciudad) {
     return ResponseEntity.ok(oficinaService.getByDireccionCiudadNombre(ciudad));
   }
+
 }

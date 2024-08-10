@@ -16,8 +16,18 @@ public class DireccionService {
   @Autowired
   private CiudadService ciudadService;
 
-  public Direccion save(Direccion direccion) {
-    return direccionRepositoryPort.save(direccion);
+  public Direccion save(DireccionDTO direccion) {
+    Direccion direccionExistente = direccionRepositoryPort
+        .findByTipoCalleAndNombreCalleAndNumeroCalleAndNumeroComplementoAndCiudadId(
+            direccion.getTipoCalle(), direccion.getNombreCalle(), direccion.getNumeroCalle(),
+            direccion.getNumeroComplemento(),
+            ciudadService.getPorNombre(direccion.getCiudad()).getId())
+        .orElse(null);
+    if (direccionExistente == null) {
+      return direccionRepositoryPort.save(convertDireccionDTO(direccion));
+    } else {
+      return direccionExistente;
+    }
   }
 
   public Direccion getById(Long id) {
