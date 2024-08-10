@@ -1,23 +1,22 @@
 package com.moufflet.ecommerce_backend.direccion.model;
 
 import com.moufflet.ecommerce_backend.ciudad.model.Ciudad;
-import com.moufflet.ecommerce_backend.cliente.domain.Cliente;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Data
 @NoArgsConstructor
+@Builder
 @AllArgsConstructor
 public class Direccion {
 
@@ -25,16 +24,14 @@ public class Direccion {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column(nullable = false)
   private String tipoCalle;
 
-  @Column(nullable = false)
+  private String nombreCalle;
+
   private String numeroCalle;
 
-  @Column(nullable = false)
   private String numeroComplemento;
 
-  @Column(nullable = false)
   private String codigoPostal;
 
   @ManyToOne

@@ -18,12 +18,13 @@ import lombok.NoArgsConstructor;
 @Entity
 @EqualsAndHashCode(callSuper = false)
 public class Empleado extends Tercero {
+
   @Enumerated(EnumType.STRING)
-  private EmpeladoRol rol;
+  private EmpleadoRol rol;
 
   @ManyToOne
   private Oficina oficina;
-  
+
   private Empleado jefe;
-  
+
 }

@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class OficinaDTO {
   private Long id;
+  private String nombre;
   private DireccionDTO direccion;
   private String telefono;
 }

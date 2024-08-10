@@ -33,11 +33,11 @@ public class Tercero implements UserDetails {
   @Id
   @Column(nullable = false, unique = true)
   private String id;
-  @Column(unique = true, nullable = true)
+  // @Column(unique = true, nullable = true)
   private String username;
   // @Column(nullable = false)
   private String password;
-  @Column(unique = true, nullable = false)
+  // @Column(unique = true, nullable = false)
   private String email;
   @Column(nullable = false)
   private String primerNombre;
@@ -45,7 +45,7 @@ public class Tercero implements UserDetails {
   @Column(nullable = false)
   private String primerApellido;
   private String segundoApellido;
-  @Column(nullable = false)
+  // @Column(nullable = false)
   private String telefono;
 
   @ManyToMany(fetch = FetchType.EAGER)
