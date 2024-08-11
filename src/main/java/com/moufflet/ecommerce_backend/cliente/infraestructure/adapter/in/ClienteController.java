@@ -2,11 +2,14 @@ package com.moufflet.ecommerce_backend.cliente.infraestructure.adapter.in;
 
 import java.util.List;
 
+import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -51,5 +54,11 @@ public class ClienteController {
   public ResponseEntity<String> deleteCliente(@RequestParam String id) {
     clienteService.deleteById(id);
     return new ResponseEntity<>("Cliente eliminado", HttpStatus.OK);
+  }
+
+  @PutMapping("/update/{id}")
+  public ResponseEntity<Cliente> updateCliente(@PathVariable String id, @RequestBody Cliente cliente) {
+    Cliente updatedCliente = clienteService.save(id, cliente);
+    return new ResponseEntity<>(updatedCliente, HttpStatus.OK);
   }
 }

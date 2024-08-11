@@ -5,6 +5,7 @@ import java.sql.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.moufflet.ecommerce_backend.empleado.model.Empleado;
 import com.moufflet.ecommerce_backend.formaPagoTercero.model.FormaPagoTercero;
 
 import jakarta.persistence.CascadeType;
@@ -50,4 +51,7 @@ public class Pedido {
 
   @ManyToOne
   private FormaPagoTercero formaPagoTercero;
+
+  @ManyToOne
+  private Empleado empleado;
 }

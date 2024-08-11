@@ -16,4 +16,7 @@ public interface PedidoRepositoryPort {
 
   List<Pedido> findByEstado(String estado);
 
+  List<Pedido> findByEmpleadoId(String empleadoId);
+
+  // List<Pedido> findByFormaPagoTercero(Long clienteId);
 }

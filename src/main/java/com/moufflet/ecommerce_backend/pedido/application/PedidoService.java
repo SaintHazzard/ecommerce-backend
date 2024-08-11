@@ -31,7 +31,7 @@ public class PedidoService {
 
   @Transactional
   public Pedido createPedido(PedidoDTO pedidoDTO, List<PedidoProductoDTO> productosDTO) {
-    Pedido pedidoEntity = mapPedidoDTOToPedido(pedidoDTO);
+    Pedido pedidoEntity = DTOtoEntity(pedidoDTO);
     Pedido savedPedido = pedidoRepository.save(pedidoEntity);
     System.out.println("Pedido guardado: " + savedPedido);
 
@@ -85,13 +85,24 @@ public class PedidoService {
     return pedidoRepository.findByEstado(estado);
   }
 
-  private Pedido mapPedidoDTOToPedido(PedidoDTO pedidoDTO) {
+  private Pedido DTOtoEntity(PedidoDTO pedidoDTO) {
     return Pedido.builder()
         .fechaPedido(pedidoDTO.getFechaPedido())
         .fechaEsperada(pedidoDTO.getFechaEsperada())
         .fechaEntrega(pedidoDTO.getFechaEntrega())
         .estado(EstadoPedido.valueOf(pedidoDTO.getEstado()))
         .comentarios(pedidoDTO.getComentarios())
+        .build();
+  }
+
+  public PedidoDTO entityToDTO(Pedido pedido) {
+    return PedidoDTO.builder()
+        .id(pedido.getId())
+        .fechaPedido(pedido.getFechaPedido())
+        .fechaEsperada(pedido.getFechaEsperada())
+        .fechaEntrega(pedido.getFechaEntrega())
+        .estado(pedido.getEstado().name())
+        .comentarios(pedido.getComentarios())
         .build();
   }
 
@@ -107,6 +118,11 @@ public class PedidoService {
 
   private List<Pedido> getPedidoByEstado(String estado) {
     return pedidoRepository.findByEstado(estado);
+  }
+
+  public List<PedidoDTO> getAllPedidosByEmpleado(String empleadoId) {
+    List<Pedido> pedidosEmpleado = pedidoRepository.findByEmpleadoId(empleadoId);
+    return pedidosEmpleado.stream().map(this::entityToDTO).toList();
   }
 
 }

@@ -34,37 +34,12 @@ public class EmpleadoService {
 
   @Transactional
   public Empleado save(EmpleadoDTO empleadoDTO) {
-    // Buscar el Tercero asociado por ID
-    Empleado tercero = (Empleado) terceroService.getById(empleadoDTO.getId());
+    return empleadoRepositoryPort.save(fromDTO(empleadoDTO));
+  }
 
-    if (tercero != null) {
-      // Configurar el ID del Empleado
-      Empleado empleadoEntity = fromDTO(empleadoDTO);
-
-      // Verificar si el Empleado ya existe
-      Empleado existingEmpleado = empleadoRepositoryPort.findById(tercero.getId()).orElse(null);
-
-      if (existingEmpleado != null) {
-        // Actualizar los detalles del Empleado existente
-        existingEmpleado.setPrimerNombre(empleadoEntity.getPrimerNombre());
-        existingEmpleado.setPrimerApellido(empleadoEntity.getPrimerApellido());
-        existingEmpleado.setEmail(empleadoEntity.getEmail());
-        existingEmpleado.setTelefono(empleadoEntity.getTelefono());
-        existingEmpleado.setRol(empleadoEntity.getRol());
-        existingEmpleado.setOficina(empleadoEntity.getOficina());
-        existingEmpleado.setJefe(empleadoEntity.getJefe());
-        return empleadoRepositoryPort.save(existingEmpleado);
-      } else {
-        // Si no existe, guardar el nuevo Empleado
-        empleadoEntity.setId(tercero.getId());
-        return empleadoRepositoryPort.save(empleadoEntity);
-      }
-    } else {
-      // Si el Tercero no existe, crear un nuevo Empleado
-      Empleado empleadoEntity = fromDTO(empleadoDTO);
-      empleadoEntity.setId(empleadoDTO.getId());
-      return empleadoRepositoryPort.save(empleadoEntity);
-    }
+  @Transactional
+  public Empleado save(Empleado empleado) {
+    return empleadoRepositoryPort.save(empleado);
   }
 
   public Empleado update(String id, EmpleadoDTO empleadoDTO) {
@@ -108,16 +83,15 @@ public class EmpleadoService {
 
   public Empleado fromDTO(EmpleadoDTO empleadoDTO) {
     Empleado empleado = new Empleado();
-    System.out.println("LLEGA 1------------------------------------------------------------------");
+    System.out.println(empleadoDTO);
+    if (empleadoDTO.getId() != null) {
+      empleado.setId(empleadoDTO.getId());
+    }
     empleado.setPrimerNombre(empleadoDTO.getPrimerNombre());
     empleado.setPrimerApellido(empleadoDTO.getPrimerApellido());
     empleado.setEmail(empleadoDTO.getEmail());
     empleado.setTelefono(empleadoDTO.getTelefono());
-    System.out.println("LLEGA 2------------------------------------------------------------------");
-
     empleado.setRol(EmpleadoRol.valueOf(empleadoDTO.getRol()));
-
-    empleado.setRoles(null);
 
     if (empleadoDTO.getJefe() != null && !empleadoDTO.getJefe().isEmpty()) {
       empleado.setJefe(getById(empleadoDTO.getJefe()));
@@ -130,8 +104,6 @@ public class EmpleadoService {
     } else {
       empleado.setOficina(null);
     }
-
-    System.out.println("LLEGA 4------------------------------------------------------------------");
 
     return empleado;
   }

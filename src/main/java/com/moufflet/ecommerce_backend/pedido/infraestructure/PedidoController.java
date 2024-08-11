@@ -89,4 +89,10 @@ public class PedidoController {
         .collect(Collectors.toList());
     return new ResponseEntity<>(pedidosDTO, HttpStatus.OK);
   }
+
+  @GetMapping("/getAllByEmpleado")
+  public ResponseEntity<List<PedidoDTO>> getAllPedidosByEmpleado(@RequestParam String empleadoId) {
+    List<PedidoDTO> pedidos = pedidoService.getAllPedidosByEmpleado(empleadoId);
+    return new ResponseEntity<>(pedidos, HttpStatus.OK);
+  }
 }
