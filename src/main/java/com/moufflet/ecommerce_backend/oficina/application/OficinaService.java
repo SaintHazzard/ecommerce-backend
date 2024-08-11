@@ -23,12 +23,13 @@ public class OficinaService {
   @Autowired
   private DireccionService direccionService;
 
-  public List<Oficina> getAllOficinas() {
-    return oficinaRepositoryPort.findAll();
+  public List<OficinaDTO> getAllOficinas() {
+    return oficinaRepositoryPort.findAll().stream().map(ofi -> toDTO(ofi)).collect(Collectors.toList());
   }
 
-  public Oficina save(Oficina oficina) {
-    return oficinaRepositoryPort.save(oficina);
+  public Oficina save(OficinaDTO oficina) {
+    Oficina oficinaEntity = OficinaDTOtoEntity(oficina);
+    return oficinaRepositoryPort.save(oficinaEntity);
   }
 
   public Oficina getById(Long id) {
@@ -60,12 +61,16 @@ public class OficinaService {
     return empleOfi.stream().map(empleado -> toDTO(empleado)).collect(Collectors.toList());
   }
 
-  public Oficina OficinaToDto(OficinaDTO oficina) {
-    Direccion direccion = direccionService.convertDireccionDTO(oficina.getDireccion());
+  public Oficina OficinaDTOtoEntity(OficinaDTO oficina) {
+    Direccion direccionEntity = direccionService.existDireccion(oficina.getDireccion());
+    if (direccionEntity == null) {
+      direccionEntity = direccionService.save(oficina.getDireccion());
+    }
     return Oficina.builder()
         .id(oficina.getId())
         .nombre(oficina.getNombre())
-        .direccion(direccion)
+        .direccion(
+            direccionEntity)
         .telefono(oficina.getTelefono())
         .build();
   }
@@ -93,6 +98,11 @@ public class OficinaService {
         .direccion(direccion)
         .telefono(oficina.getTelefono())
         .build();
+  }
+
+  public Oficina update(OficinaDTO oficina) {
+    Oficina oficinaEntity = OficinaDTOtoEntity(oficina);
+    return oficinaRepositoryPort.save(oficinaEntity);
   }
 
 }

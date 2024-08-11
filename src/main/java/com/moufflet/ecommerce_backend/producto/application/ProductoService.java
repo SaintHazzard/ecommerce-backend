@@ -53,7 +53,7 @@ public class ProductoService {
     }
   }
 
-  public Producto findById(Long id) {
+  public Producto getById(Long id) {
     return productoRepositoryPort.findById(id).orElse(null);
   }
 
@@ -82,7 +82,7 @@ public class ProductoService {
   }
 
   public Producto updateProducto(Long id, ProductoDTO productoDTO, byte[] imagen) {
-    Producto producto = findById(id);
+    Producto producto = getById(id);
 
     producto.setCodigo(productoDTO.getCodigo());
     producto.setNombre(productoDTO.getNombre());

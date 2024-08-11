@@ -65,4 +65,10 @@ public class DireccionService {
         .ciudad(ciudadService.getPorNombre(direccionDTO.getCiudad()))
         .build();
   }
+
+  public Direccion existDireccion(DireccionDTO direccion) {
+    return direccionRepositoryPort.findByTipoCalleAndNombreCalleAndNumeroCalleAndNumeroComplementoAndCiudadId(
+        direccion.getTipoCalle(), direccion.getNombreCalle(), direccion.getNumeroCalle(),
+        direccion.getNumeroComplemento(), direccion.getCiudad()).get();
+  }
 }

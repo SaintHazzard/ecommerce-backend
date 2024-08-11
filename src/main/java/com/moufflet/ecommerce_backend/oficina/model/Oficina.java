@@ -31,4 +31,5 @@ public class Oficina {
   private String telefono;
   @OneToMany
   private List<Empleado> empleados;
+
 }

@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import com.moufflet.ecommerce_backend.gama.model.Gama;
+import com.moufflet.ecommerce_backend.oficinaProducto.model.OficinaProducto;
 import com.moufflet.ecommerce_backend.pedido.model.PedidoProducto;
 import com.moufflet.ecommerce_backend.proveedor.model.Proveedor;
 
@@ -52,4 +53,7 @@ public class Producto {
 
   @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL)
   private List<PedidoProducto> pedidos;
+
+  @OneToMany(mappedBy = "id.producto")
+  private List<OficinaProducto> oficinaProductos;
 }
