@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -37,7 +38,7 @@ public class OficinaController {
     return ResponseEntity.ok(oficinaService.getById(id));
   }
 
-  @GetMapping("/delete")
+  @DeleteMapping("/delete")
   public ResponseEntity<Void> borrarOficina(@RequestParam Long id) {
     oficinaService.deleteById(id);
     return ResponseEntity.ok().build();
