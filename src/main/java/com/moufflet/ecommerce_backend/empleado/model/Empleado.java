@@ -15,12 +15,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @EqualsAndHashCode(callSuper = false)
+@ToString(exclude = {"oficina"})
 public class Empleado extends Tercero {
 
   @Enumerated(EnumType.STRING)

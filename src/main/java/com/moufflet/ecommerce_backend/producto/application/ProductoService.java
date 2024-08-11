@@ -105,4 +105,22 @@ public class ProductoService {
     return productoRepositoryPort.save(producto);
   }
 
+  public List<ProductoDTO> getByGama(String gama) {
+    return productoRepositoryPort.findByGamaNombre(gama).stream()
+        .map(this::convertToDTO)
+        .collect(Collectors.toList());
+  }
+
+  public List<ProductoDTO> getByStock(Integer stock) {
+    return productoRepositoryPort.findByOficinaProductosStockGreaterThan(stock).stream()
+        .map(this::convertToDTO)
+        .collect(Collectors.toList());
+  }
+
+  public List<ProductoDTO> getByGamaId(Long gamaId) {
+    return productoRepositoryPort.findByGamaId(gamaId).stream()
+        .map(this::convertToDTO)
+        .collect(Collectors.toList());
+  }
+
 }

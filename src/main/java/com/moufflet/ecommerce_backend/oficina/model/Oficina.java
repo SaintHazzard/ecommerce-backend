@@ -10,6 +10,7 @@ import com.moufflet.ecommerce_backend.empleado.model.Empleado;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -19,12 +20,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@ToString(exclude = { "empleados" })
 public class Oficina {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,7 +39,7 @@ public class Oficina {
   private Direccion direccion;
   private String telefono;
   @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH,
-      CascadeType.DETACH })
+      CascadeType.DETACH }, fetch = FetchType.EAGER)
   private List<Empleado> empleados;
 
 }

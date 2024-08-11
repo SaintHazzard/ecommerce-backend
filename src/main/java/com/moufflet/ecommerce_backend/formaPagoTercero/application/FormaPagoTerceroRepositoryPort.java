@@ -16,4 +16,6 @@ public interface FormaPagoTerceroRepositoryPort {
   List<FormaPagoTercero> findByFormaPagoId(Long formaPagoId);
 
   List<FormaPagoTercero> findByTerceroId(String terceroId);
+
+  List<FormaPagoTercero> findAll();
 }

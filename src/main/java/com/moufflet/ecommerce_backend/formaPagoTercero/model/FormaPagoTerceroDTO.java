@@ -15,5 +15,8 @@ public class FormaPagoTerceroDTO {
   private Long id;
   private Long formaPagoId;
   private String terceroId;
+  private String nombre;
+  private String apellido;
+  private String formaPagoNombre;
   private LocalDate fechaPago;
 }

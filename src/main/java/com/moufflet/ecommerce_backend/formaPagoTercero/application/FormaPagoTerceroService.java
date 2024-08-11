@@ -30,7 +30,14 @@ public class FormaPagoTerceroService {
     return entityToDTO(formaPagoTercero);
   }
 
-  public FormaPagoTerceroDTO buscarFormaPagoTerceroPorId(Long pedidoId, String terceroId) {
+  public List<FormaPagoTerceroDTO> getAll() {
+    List<FormaPagoTercero> formaPagoTerceros = formaPagoTerceroRepositoryPort.findAll();
+    return formaPagoTerceros.stream()
+        .map(this::entityToDTO)
+        .collect(Collectors.toList());
+  }
+
+  public FormaPagoTerceroDTO buscarFormaPagoTerceroAndPedidoPorId(Long pedidoId, String terceroId) {
     FormaPagoTerceroId id = FormaPagoTerceroId.builder()
         .formaPagoId(pedidoId)
         .terceroId(terceroId)
@@ -69,6 +76,9 @@ public class FormaPagoTerceroService {
   public FormaPagoTerceroDTO entityToDTO(FormaPagoTercero formaPagoTercero) {
     return FormaPagoTerceroDTO.builder()
         .id(formaPagoTercero.getId().getFormaPagoId())
+        .nombre(formaPagoTercero.getTercero().getPrimerNombre())
+        .apellido(formaPagoTercero.getTercero().getPrimerApellido())
+        .formaPagoNombre(formaPagoTercero.getFormaPago().getNombre())
         .formaPagoId(formaPagoTercero.getId().getFormaPagoId())
         .terceroId(formaPagoTercero.getId().getTerceroId())
         .fechaPago(formaPagoTercero.getFechaPago())

@@ -18,8 +18,6 @@ import com.moufflet.ecommerce_backend.oficina.model.Oficina;
 import com.moufflet.ecommerce_backend.tercero.application.TerceroService;
 import com.moufflet.ecommerce_backend.tercero.domain.Tercero;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -33,7 +31,6 @@ public class EmpleadoService {
 
   @Autowired
   private TerceroService terceroService;
-
 
   @Value("${spring.datasource.url}")
   private String url;
@@ -53,6 +50,7 @@ public class EmpleadoService {
     if (tercero != null) {
       try (Connection conn = DriverManager.getConnection(url, user, password)) {
         String sql = "INSERT INTO empleado (rol, id, jefe_id, oficina_id) VALUES (?, ?, ?, ?)";
+        String sql2 = "INSERT INTO oficina_empleados (oficina_id,empleados_id) VALUES (?,?)";
         if (empleadoDTO.getJefe() == null || empleadoDTO.getJefe().isEmpty()) {
           empleadoDTO.setJefe(null);
         }
@@ -60,11 +58,19 @@ public class EmpleadoService {
           empleadoDTO.setOficina(null);
         }
         preparedStatement = conn.prepareStatement(sql);
+        PreparedStatement pstmt2 = conn.prepareStatement(sql2);
         preparedStatement.setString(1, empleadoDTO.getRol());
         preparedStatement.setString(2, empleadoDTO.getId());
         preparedStatement.setString(3, empleadoDTO.getJefe());
         preparedStatement.setLong(4, empleadoDTO.getOficina());
         preparedStatement.executeUpdate();
+
+
+        pstmt2.setLong(1, empleadoDTO.getOficina());
+        pstmt2.setString(2, empleadoDTO.getId());
+        pstmt2.executeUpdate();
+
+        conn.commit();
       } catch (SQLException e) {
         throw new RuntimeException(e);
       } finally {
@@ -84,6 +90,10 @@ public class EmpleadoService {
       return empleadoRepositoryPort.save(empleado);
     }
     return null;
+  }
+
+  public List<Empleado> getByOficinaNombre(String nombre) {
+    return empleadoRepositoryPort.findByOficinaNombre(nombre);
   }
 
   @Transactional

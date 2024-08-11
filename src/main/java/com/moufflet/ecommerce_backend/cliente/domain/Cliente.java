@@ -29,5 +29,4 @@ public class Cliente extends Tercero {
   private List<Direccion> direccion;
   @Column(precision = 15, scale = 2)
   private BigDecimal credito;
-
 }

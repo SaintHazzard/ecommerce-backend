@@ -15,4 +15,14 @@ public interface ProductoRepositoryPort {
 
   List<Producto> findAll();
 
+  List<Producto> findByGamaId(Long gamaId);
+
+  List<Producto> findByGamaNombre(String gamaNombre);
+
+  List<Producto> findByOficinaProductosStockGreaterThan(Integer stock);
+
+  List<Producto> findByOficinaProductosStockLessThan(Integer stock);
+
+  List<Producto> findByOficinaProductosStockBetween(Integer stock1, Integer stock2);
+
 }

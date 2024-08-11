@@ -56,4 +56,19 @@ public class ProductoController {
     return new ResponseEntity<>(HttpStatus.OK);
   }
 
+  @GetMapping("/getByGama/{gama}")
+  public List<ProductoDTO> getByGamaNombre(@PathVariable String gama) {
+    return productoService.getByGama(gama);
+  }
+
+  @GetMapping("/getByStoack/{stock}")
+  public List<ProductoDTO> getByStock(@PathVariable Integer stock) {
+    return productoService.getByStock(stock);
+  }
+
+  @GetMapping("getByGamaId/{gamaId}")
+  public List<ProductoDTO> getByGamaId(@PathVariable Long gamaId) {
+    return productoService.getByGamaId(gamaId);
+  }
+
 }

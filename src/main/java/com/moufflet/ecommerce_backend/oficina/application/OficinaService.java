@@ -52,15 +52,20 @@ public class OficinaService {
   }
 
   public List<EmpleadoDTO> getByOficina(String nombre) {
+    System.out.println(oficinaRepositoryPort.findByNombre(nombre).orElse(null));
+    System.out.println(nombre);
     List<Empleado> empleOfi = oficinaRepositoryPort.findByNombre(nombre).orElse(null).getEmpleados();
-    return empleOfi.stream().map(empleado -> toDTO(empleado)).collect(Collectors.toList());
-  }
-
-  public List<EmpleadoDTO> getByOficina(Long id) {
-    List<Empleado> empleOfi = oficinaRepositoryPort.findById(id).orElse(null).getEmpleados();
     System.out.println(empleOfi + " adsdsfsdf");
     return empleOfi.stream().map(empleado -> toDTO(empleado)).collect(Collectors.toList());
   }
+
+  // public List<EmpleadoDTO> getByOficina(Long id) {
+  // List<Empleado> empleOfi =
+  // oficinaRepositoryPort.findById(id).orElse(null).getEmpleados();
+  // System.out.println(empleOfi + " adsdsfsdf");
+  // return empleOfi.stream().map(empleado ->
+  // toDTO(empleado)).collect(Collectors.toList());
+  // }
 
   public Oficina OficinaDTOtoEntity(OficinaDTO oficina) {
     Direccion direccionEntity = direccionService.existDireccion(oficina.getDireccion());
