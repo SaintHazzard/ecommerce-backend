@@ -30,12 +30,13 @@ public class Oficina {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
   private String nombre;
-  @ManyToOne(cascade = { CascadeType.ALL, CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH,
+  @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH,
       CascadeType.DETACH })
   @OnDelete(action = OnDeleteAction.SET_NULL)
   private Direccion direccion;
   private String telefono;
-  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH,
+      CascadeType.DETACH })
   private List<Empleado> empleados;
 
 }

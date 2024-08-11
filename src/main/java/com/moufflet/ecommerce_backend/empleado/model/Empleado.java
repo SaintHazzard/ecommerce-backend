@@ -29,7 +29,7 @@ public class Empleado extends Tercero {
   @ManyToOne
   private Oficina oficina;
 
-  @ManyToOne(cascade={CascadeType.ALL, CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+  @ManyToOne(cascade={CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
   @OnDelete(action = OnDeleteAction.SET_NULL)
   private Empleado jefe;
 
