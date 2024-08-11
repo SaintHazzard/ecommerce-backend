@@ -1,8 +1,12 @@
 package com.moufflet.ecommerce_backend.empleado.model;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import com.moufflet.ecommerce_backend.oficina.model.Oficina;
 import com.moufflet.ecommerce_backend.tercero.domain.Tercero;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -25,7 +29,8 @@ public class Empleado extends Tercero {
   @ManyToOne
   private Oficina oficina;
 
-  @ManyToOne
+  @ManyToOne(cascade={CascadeType.ALL, CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+  @OnDelete(action = OnDeleteAction.SET_NULL)
   private Empleado jefe;
 
 }

@@ -1,8 +1,13 @@
 package com.moufflet.ecommerce_backend.empleado.application;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.moufflet.ecommerce_backend.empleado.model.Empleado;
@@ -29,12 +34,56 @@ public class EmpleadoService {
   @Autowired
   private TerceroService terceroService;
 
-  @PersistenceContext
-  private EntityManager entityManager;
+
+  @Value("${spring.datasource.url}")
+  private String url;
+
+  @Value("${spring.datasource.username}")
+  private String user;
+
+  @Value("${spring.datasource.password}")
+  private String password;
 
   @Transactional
   public Empleado save(EmpleadoDTO empleadoDTO) {
-    return empleadoRepositoryPort.save(fromDTO(empleadoDTO));
+    Connection connection = null;
+    PreparedStatement preparedStatement = null;
+    Tercero tercero = terceroService.getById(empleadoDTO.getId());
+    System.out.println("Registro de empleado que era tercero " + empleadoDTO);
+    if (tercero != null) {
+      try (Connection conn = DriverManager.getConnection(url, user, password)) {
+        String sql = "INSERT INTO empleado (rol, id, jefe_id, oficina_id) VALUES (?, ?, ?, ?)";
+        if (empleadoDTO.getJefe() == null || empleadoDTO.getJefe().isEmpty()) {
+          empleadoDTO.setJefe(null);
+        }
+        if (empleadoDTO.getOficina() == null) {
+          empleadoDTO.setOficina(null);
+        }
+        preparedStatement = conn.prepareStatement(sql);
+        preparedStatement.setString(1, empleadoDTO.getRol());
+        preparedStatement.setString(2, empleadoDTO.getId());
+        preparedStatement.setString(3, empleadoDTO.getJefe());
+        preparedStatement.setLong(4, empleadoDTO.getOficina());
+        preparedStatement.executeUpdate();
+      } catch (SQLException e) {
+        throw new RuntimeException(e);
+      } finally {
+        try {
+          if (preparedStatement != null) {
+            preparedStatement.close();
+          }
+          if (connection != null) {
+            connection.close();
+          }
+        } catch (SQLException e) {
+          throw new RuntimeException(e);
+        }
+      }
+    } else {
+      Empleado empleado = fromDTO(empleadoDTO);
+      return empleadoRepositoryPort.save(empleado);
+    }
+    return null;
   }
 
   @Transactional

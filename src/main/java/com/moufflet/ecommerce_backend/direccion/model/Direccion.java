@@ -1,7 +1,11 @@
 package com.moufflet.ecommerce_backend.direccion.model;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import com.moufflet.ecommerce_backend.ciudad.model.Ciudad;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -34,8 +38,10 @@ public class Direccion {
 
   private String codigoPostal;
 
-  @ManyToOne
   @JoinColumn(name = "ciudad_id", nullable = false)
+  @ManyToOne(cascade = { CascadeType.ALL, CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH,
+      CascadeType.DETACH })
+  @OnDelete(action = OnDeleteAction.SET_NULL)
   private Ciudad ciudad;
 
 }

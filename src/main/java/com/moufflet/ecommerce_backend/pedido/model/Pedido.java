@@ -4,6 +4,9 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.List;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.moufflet.ecommerce_backend.empleado.model.Empleado;
 import com.moufflet.ecommerce_backend.formaPagoTercero.model.FormaPagoTercero;
@@ -49,9 +52,13 @@ public class Pedido {
   @JsonIgnore
   private List<PedidoProducto> productos;
 
-  @ManyToOne
+  @ManyToOne(cascade = { CascadeType.ALL, CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH,
+      CascadeType.DETACH })
+  @OnDelete(action = OnDeleteAction.SET_NULL)
   private FormaPagoTercero formaPagoTercero;
 
-  @ManyToOne
+  @ManyToOne(cascade = { CascadeType.ALL, CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH,
+      CascadeType.DETACH })
+  @OnDelete(action = OnDeleteAction.SET_NULL)
   private Empleado empleado;
 }
