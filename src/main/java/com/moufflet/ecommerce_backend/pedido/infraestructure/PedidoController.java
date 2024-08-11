@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.moufflet.ecommerce_backend.pedido.application.PedidoDTO;
 import com.moufflet.ecommerce_backend.pedido.application.PedidoRequest;
 import com.moufflet.ecommerce_backend.pedido.application.PedidoService;
+import com.moufflet.ecommerce_backend.pedido.model.EstadoPedido;
 import com.moufflet.ecommerce_backend.pedido.model.Pedido;
 import com.moufflet.ecommerce_backend.pedido.model.PedidoProducto;
 
@@ -42,8 +43,7 @@ public class PedidoController {
   public ResponseEntity<List<PedidoDTO>> getAllPedidos() {
     List<Pedido> pedidos = pedidoService.getAllPedidos();
     List<PedidoDTO> pedidosDTO = pedidos.stream()
-        .map(pedido -> new PedidoDTO(pedido.getId(), pedido.getFechaPedido(), pedido.getFechaEsperada(),
-            pedido.getFechaEntrega(), pedido.getEstado().name(), pedido.getComentarios()))
+        .map(pedido -> entityToDTO(pedido))
         .collect(Collectors.toList());
     return new ResponseEntity<>(pedidosDTO, HttpStatus.OK);
   }
@@ -74,25 +74,38 @@ public class PedidoController {
     return new ResponseEntity<>(pedidoProducto, HttpStatus.CREATED);
   }
 
-  @GetMapping("/getAllByState")
-  public ResponseEntity<List<Pedido>> getAllPedidosByState(@RequestParam String estado) {
-    List<Pedido> pedidos = pedidoService.getAllPedidosByState(estado.toLowerCase());
-    return new ResponseEntity<>(pedidos, HttpStatus.OK);
-  }
-
   @GetMapping("/getAllByEstado")
   public ResponseEntity<List<PedidoDTO>> getAllPedidos(@RequestParam String estado) {
-    List<Pedido> pedidos = pedidoService.getAllPedidosByState(estado);
-    List<PedidoDTO> pedidosDTO = pedidos.stream()
-        .map(pedido -> new PedidoDTO(pedido.getId(), pedido.getFechaPedido(), pedido.getFechaEsperada(),
-            pedido.getFechaEntrega(), pedido.getEstado().name(), pedido.getComentarios()))
-        .collect(Collectors.toList());
-    return new ResponseEntity<>(pedidosDTO, HttpStatus.OK);
+    System.out.println("Estado: " + estado);
+    List<PedidoDTO> pedidos = pedidoService.getAllPedidosByState(estado);
+    return new ResponseEntity<>(pedidos, HttpStatus.OK);
   }
 
   @GetMapping("/getAllByEmpleado")
   public ResponseEntity<List<PedidoDTO>> getAllPedidosByEmpleado(@RequestParam String empleadoId) {
     List<PedidoDTO> pedidos = pedidoService.getAllPedidosByEmpleado(empleadoId);
     return new ResponseEntity<>(pedidos, HttpStatus.OK);
+  }
+
+  public PedidoDTO entityToDTO(Pedido pedido) {
+    return PedidoDTO.builder()
+        .id(pedido.getId())
+        .fechaPedido(pedido.getFechaPedido())
+        .fechaEsperada(pedido.getFechaEsperada())
+        .fechaEntrega(pedido.getFechaEntrega())
+        .estado(pedido.getEstado().name())
+        .comentarios(pedido.getComentarios())
+        .total(pedido.getTotal())
+        .build();
+  }
+
+  public Pedido DTOtoEntity(PedidoDTO pedidoDTO) {
+    return Pedido.builder()
+        .fechaPedido(pedidoDTO.getFechaPedido())
+        .fechaEsperada(pedidoDTO.getFechaEsperada())
+        .fechaEntrega(pedidoDTO.getFechaEntrega())
+        .estado(EstadoPedido.valueOf(pedidoDTO.getEstado()))
+        .comentarios(pedidoDTO.getComentarios())
+        .build();
   }
 }

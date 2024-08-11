@@ -1,5 +1,6 @@
 package com.moufflet.ecommerce_backend.Formapago.application;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.moufflet.ecommerce_backend.Formapago.model.FormaPago;
@@ -12,4 +13,6 @@ public interface FormaPagoRepositoryPort {
   void deleteById(Long id);
 
   Optional<FormaPago> findByNombre(String nombre);
+
+  List<FormaPago> findAll();
 }

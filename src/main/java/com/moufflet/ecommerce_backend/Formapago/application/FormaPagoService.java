@@ -1,5 +1,7 @@
 package com.moufflet.ecommerce_backend.Formapago.application;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,10 @@ public class FormaPagoService {
 
   public FormaPago guardarFormaPago(FormaPagoDTO formaPago) {
     return formaPagoRepositoryPort.save(DTOtoEntity(formaPago));
+  }
+
+  public List<FormaPagoDTO> getAll() {
+    return formaPagoRepositoryPort.findAll().stream().map(fp -> entityToDTO(fp)).toList();
   }
 
   public FormaPago buscarFormaPagoPorId(Long id) {

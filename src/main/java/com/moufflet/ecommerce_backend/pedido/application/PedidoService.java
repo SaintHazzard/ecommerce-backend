@@ -32,14 +32,17 @@ public class PedidoService {
   @Transactional
   public Pedido createPedido(PedidoDTO pedidoDTO, List<PedidoProductoDTO> productosDTO) {
     Pedido pedidoEntity = DTOtoEntity(pedidoDTO);
+    pedidoEntity.setTotal(productosDTO.stream()
+        .map(pedidoProductoDTO -> productoRepository.findById(pedidoProductoDTO.getId().getProducto()).orElse(null)
+            .getPrecio()
+            .multiply(BigDecimal.valueOf(pedidoProductoDTO.getCantidad())))
+        .reduce(BigDecimal.ZERO, BigDecimal::add));
     Pedido savedPedido = pedidoRepository.save(pedidoEntity);
     System.out.println("Pedido guardado: " + savedPedido);
-
     for (PedidoProductoDTO pedidoProductoDTO : productosDTO) {
       PedidoProducto pedidoProductoEntity = mapPedidoProductoDTOToPedidoProducto(pedidoProductoDTO, savedPedido);
       pedidoProductoRepository.save(pedidoProductoEntity);
     }
-
     return savedPedido;
   }
 
@@ -81,8 +84,11 @@ public class PedidoService {
     return pedidoProductoRepository.save(pedidoProducto);
   }
 
-  public List<Pedido> getAllPedidosByState(String estado) {
-    return pedidoRepository.findByEstado(estado);
+  public List<PedidoDTO> getAllPedidosByState(String estado) {
+    EstadoPedido estadoPedido = EstadoPedido.valueOf(estado);
+    return pedidoRepository.findByEstado(
+        estadoPedido).stream().map(pedido -> entityToDTO(pedido))
+        .toList();
   }
 
   private Pedido DTOtoEntity(PedidoDTO pedidoDTO) {
@@ -114,10 +120,6 @@ public class PedidoService {
             .orElseThrow(() -> new RuntimeException("Producto no encontrado")))
         .id(new PedidoProductoId(pedido.getId(), pedidoProductoDTO.getId().getProducto()))
         .build();
-  }
-
-  private List<Pedido> getPedidoByEstado(String estado) {
-    return pedidoRepository.findByEstado(estado);
   }
 
   public List<PedidoDTO> getAllPedidosByEmpleado(String empleadoId) {

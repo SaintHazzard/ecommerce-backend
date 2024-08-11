@@ -1,5 +1,6 @@
 package com.moufflet.ecommerce_backend.pedido.application;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 
 import lombok.AllArgsConstructor;
@@ -21,4 +22,6 @@ public class PedidoDTO {
   private String estado;
 
   private String comentarios;
+
+  private BigDecimal total;
 }
