@@ -61,7 +61,7 @@ public class EmpleadoController {
     return ResponseEntity.ok(empleadoService.findAll());
   }
 
-  @PutMapping("/update")
+  @PutMapping("/update/{empleado}")
   public ResponseEntity<Empleado> actualizarEmpleado(@PathVariable String empleado,
       @RequestBody EmpleadoDTO empleadoDTO) {
     return ResponseEntity.ok(empleadoService.update(empleado, empleadoDTO));

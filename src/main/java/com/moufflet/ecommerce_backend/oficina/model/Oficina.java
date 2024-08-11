@@ -5,6 +5,7 @@ import java.util.List;
 import com.moufflet.ecommerce_backend.direccion.model.Direccion;
 import com.moufflet.ecommerce_backend.empleado.model.Empleado;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -29,7 +30,7 @@ public class Oficina {
   @ManyToOne
   private Direccion direccion;
   private String telefono;
-  @OneToMany
+  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Empleado> empleados;
 
 }
