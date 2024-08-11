@@ -69,6 +69,6 @@ public class DireccionService {
   public Direccion existDireccion(DireccionDTO direccion) {
     return direccionRepositoryPort.findByTipoCalleAndNombreCalleAndNumeroCalleAndNumeroComplementoAndCiudadId(
         direccion.getTipoCalle(), direccion.getNombreCalle(), direccion.getNumeroCalle(),
-        direccion.getNumeroComplemento(), direccion.getCiudad()).get();
+        direccion.getNumeroComplemento(), direccion.getCiudad()).orElse(null);
   }
 }
