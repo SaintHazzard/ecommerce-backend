@@ -28,7 +28,6 @@ public class PedidoProducto {
 
   @ManyToOne
   @MapsId("producto")
-
   private Producto producto;
 
   private int cantidad;

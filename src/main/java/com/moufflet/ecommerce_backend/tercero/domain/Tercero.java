@@ -9,6 +9,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.moufflet.ecommerce_backend.formaPagoTercero.model.FormaPagoTercero;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -18,6 +20,7 @@ import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -52,6 +55,9 @@ public class Tercero implements UserDetails {
   @ManyToMany(fetch = FetchType.EAGER)
   @JoinTable(name = "tercero_rol", joinColumns = @JoinColumn(name = "tercero_id"), inverseJoinColumns = @JoinColumn(name = "rol_id"))
   private List<Role> roles;
+
+  @OneToMany(mappedBy = "tercero")
+  private List<FormaPagoTercero> formaPagoTerceros;
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
