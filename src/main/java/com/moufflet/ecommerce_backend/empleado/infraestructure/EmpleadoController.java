@@ -48,6 +48,7 @@ public class EmpleadoController {
 
   @GetMapping("/buscarPorOficina")
   public ResponseEntity<List<EmpleadoDTO>> buscarEmpleadoPorOficina(@RequestParam String oficina) {
+    System.out.println(oficina + " HOLAAAAAAAAAAAAAAAAAAAAAA");
     return ResponseEntity.ok(oficinaService.getByOficina(oficina));
   }
 

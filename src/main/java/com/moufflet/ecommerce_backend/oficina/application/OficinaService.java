@@ -58,6 +58,7 @@ public class OficinaService {
 
   public List<EmpleadoDTO> getByOficina(Long id) {
     List<Empleado> empleOfi = oficinaRepositoryPort.findById(id).orElse(null).getEmpleados();
+    System.out.println(empleOfi + " adsdsfsdf");
     return empleOfi.stream().map(empleado -> toDTO(empleado)).collect(Collectors.toList());
   }
 
