@@ -92,7 +92,6 @@ public class EmpleadoService {
         preparedStatement.setLong(1, empleadoDTO.getOficina());
         preparedStatement.setString(2, empleadoDTO.getId());
         preparedStatement.executeUpdate();
-        conn.commit();
       } catch (SQLException e) {
         throw new RuntimeException(e);
       } finally {
@@ -148,6 +147,21 @@ public class EmpleadoService {
   }
 
   public void deleteById(String id) {
+    System.out.println("Borrando empleado con id: " + id);
+    try (Connection conn = DriverManager.getConnection(url, user, password)) {
+      String sql = "DELETE FROM empleado WHERE id = ?";
+      String sql2 = "DELETE FROM oficina_empleados WHERE empleados_id = ?";
+      PreparedStatement preparedStatement = conn.prepareStatement(sql);
+      PreparedStatement pstmt2 = conn.prepareStatement(sql2);
+      pstmt2.setString(1, id);
+      pstmt2.executeUpdate();
+      preparedStatement.setString(1, id);
+      preparedStatement.executeUpdate();
+
+      conn.close();
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
+    }
     empleadoRepositoryPort.deleteById(id);
   }
 

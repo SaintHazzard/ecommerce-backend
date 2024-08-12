@@ -3,6 +3,7 @@ package com.moufflet.ecommerce_backend.empleado.model;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.moufflet.ecommerce_backend.oficina.model.Oficina;
 import com.moufflet.ecommerce_backend.tercero.domain.Tercero;
 
@@ -29,6 +30,7 @@ public class Empleado extends Tercero {
   private EmpleadoRol rol;
 
   @ManyToOne
+  @JsonManagedReference
   private Oficina oficina;
 
   @ManyToOne(cascade={CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})

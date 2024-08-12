@@ -5,6 +5,7 @@ import java.util.List;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.moufflet.ecommerce_backend.direccion.model.Direccion;
 import com.moufflet.ecommerce_backend.empleado.model.Empleado;
 
@@ -40,6 +41,7 @@ public class Oficina {
   private String telefono;
   @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH,
       CascadeType.DETACH }, fetch = FetchType.EAGER)
+  @JsonManagedReference
   private List<Empleado> empleados;
 
 }

@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.moufflet.ecommerce_backend.Formapago.model.FormaPago;
 import com.moufflet.ecommerce_backend.empleado.model.Empleado;
 import com.moufflet.ecommerce_backend.pedido.model.Pedido;
@@ -39,9 +40,11 @@ public class FormaPagoTercero {
   private Tercero tercero;
 
   @OneToMany(mappedBy = "formaPagoTercero")
+  @JsonManagedReference
   private List<Pedido> pedidos;
 
   @ManyToOne
+  @JsonBackReference
   private Empleado empleado;
 
   private LocalDate fechaPago;
