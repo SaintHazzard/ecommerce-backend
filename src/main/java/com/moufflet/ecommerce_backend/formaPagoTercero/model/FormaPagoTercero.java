@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import com.moufflet.ecommerce_backend.Formapago.model.FormaPago;
+import com.moufflet.ecommerce_backend.empleado.model.Empleado;
 import com.moufflet.ecommerce_backend.pedido.model.Pedido;
 import com.moufflet.ecommerce_backend.tercero.domain.Tercero;
 
@@ -34,6 +35,9 @@ public class FormaPagoTercero {
 
   @OneToMany(mappedBy = "formaPagoTercero")
   private List<Pedido> pedidos;
-  
+
+  @ManyToOne
+  private Empleado empleado;
+
   private LocalDate fechaPago;
 }

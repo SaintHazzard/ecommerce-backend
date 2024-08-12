@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.moufflet.ecommerce_backend.Formapago.application.FormaPagoService;
+import com.moufflet.ecommerce_backend.empleado.application.EmpleadoService;
 import com.moufflet.ecommerce_backend.formaPagoTercero.model.FormaPagoTercero;
 import com.moufflet.ecommerce_backend.formaPagoTercero.model.FormaPagoTerceroDTO;
 import com.moufflet.ecommerce_backend.formaPagoTercero.model.FormaPagoTerceroId;
@@ -23,6 +24,9 @@ public class FormaPagoTerceroService {
 
   @Autowired
   private TerceroService terceroService;
+
+  @Autowired
+  private EmpleadoService empleadoService;
 
   public FormaPagoTerceroDTO guardarFormaPagoTercero(FormaPagoTerceroDTO formaPagoTerceroDTO) {
     FormaPagoTercero formaPagoTercero = DTOtoEntity(formaPagoTerceroDTO);
@@ -70,6 +74,7 @@ public class FormaPagoTerceroService {
         .tercero(terceroService.getById(formaPagoTerceroDTO
             .getTerceroId()))
         .fechaPago(formaPagoTerceroDTO.getFechaPago())
+        .empleado(empleadoService.getById(formaPagoTerceroDTO.getEmpleadoId()))
         .build();
   }
 
