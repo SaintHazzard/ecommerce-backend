@@ -23,6 +23,8 @@ public class PedidoDTO {
 
   private String comentarios;
   private String cliente;
+  private String formaPagoId;
+  private String terceroId;
   private BigDecimal total;
 
 }

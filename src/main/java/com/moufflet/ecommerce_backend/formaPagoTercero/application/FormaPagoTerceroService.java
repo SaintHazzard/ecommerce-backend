@@ -30,8 +30,42 @@ public class FormaPagoTerceroService {
 
   public FormaPagoTerceroDTO guardarFormaPagoTercero(FormaPagoTerceroDTO formaPagoTerceroDTO) {
     FormaPagoTercero formaPagoTercero = DTOtoEntity(formaPagoTerceroDTO);
+    System.out.println("------------------------------------------------------------------------------");
+    System.out.println("Forma de pago tercero: " + formaPagoTercero);
+    System.out.println("------------------------------------------------------------------------------");
     formaPagoTercero = formaPagoTerceroRepositoryPort.save(formaPagoTercero);
     return entityToDTO(formaPagoTercero);
+  }
+
+  public FormaPagoTercero DTOtoEntity(FormaPagoTerceroDTO formaPagoTerceroDTO) {
+    FormaPagoTerceroId id = FormaPagoTerceroId.builder()
+        .formaPagoId(formaPagoTerceroDTO.getFormaPagoId())
+        .terceroId(formaPagoTerceroDTO.getTerceroId())
+        .build();
+    return FormaPagoTercero.builder()
+        .id(id)
+        .formaPago(formaPagoService.buscarFormaPagoPorId((formaPagoTerceroDTO.getFormaPagoId())))
+        .tercero(terceroService.getById(formaPagoTerceroDTO
+            .getTerceroId()))
+        .fechaPago(formaPagoTerceroDTO.getFechaPago())
+        .empleado(empleadoService.getById(formaPagoTerceroDTO.getEmpleadoId()))
+        .build();
+  }
+
+  public FormaPagoTerceroDTO entityToDTO(FormaPagoTercero formaPagoTercero) {
+    return FormaPagoTerceroDTO.builder()
+        .id(formaPagoTercero.getId().getFormaPagoId())
+        .nombre(formaPagoTercero.getTercero().getPrimerNombre())
+        .apellido(formaPagoTercero.getTercero().getPrimerApellido())
+        .formaPagoNombre(formaPagoTercero.getFormaPago().getNombre())
+        .formaPagoId(formaPagoTercero.getId().getFormaPagoId())
+        .terceroId(formaPagoTercero.getId().getTerceroId())
+        .fechaPago(formaPagoTercero.getFechaPago())
+        .build();
+  }
+
+  public FormaPagoTercero getById(FormaPagoTerceroId id) {
+    return formaPagoTerceroRepositoryPort.findById(id).orElse(null);
   }
 
   public List<FormaPagoTerceroDTO> getAll() {
@@ -63,30 +97,4 @@ public class FormaPagoTerceroService {
         .collect(Collectors.toList());
   }
 
-  public FormaPagoTercero DTOtoEntity(FormaPagoTerceroDTO formaPagoTerceroDTO) {
-    FormaPagoTerceroId id = FormaPagoTerceroId.builder()
-        .formaPagoId(formaPagoTerceroDTO.getFormaPagoId())
-        .terceroId(formaPagoTerceroDTO.getTerceroId())
-        .build();
-    return FormaPagoTercero.builder()
-        .id(id)
-        .formaPago(formaPagoService.buscarFormaPagoPorId((formaPagoTerceroDTO.getFormaPagoId())))
-        .tercero(terceroService.getById(formaPagoTerceroDTO
-            .getTerceroId()))
-        .fechaPago(formaPagoTerceroDTO.getFechaPago())
-        .empleado(empleadoService.getById(formaPagoTerceroDTO.getEmpleadoId()))
-        .build();
-  }
-
-  public FormaPagoTerceroDTO entityToDTO(FormaPagoTercero formaPagoTercero) {
-    return FormaPagoTerceroDTO.builder()
-        .id(formaPagoTercero.getId().getFormaPagoId())
-        .nombre(formaPagoTercero.getTercero().getPrimerNombre())
-        .apellido(formaPagoTercero.getTercero().getPrimerApellido())
-        .formaPagoNombre(formaPagoTercero.getFormaPago().getNombre())
-        .formaPagoId(formaPagoTercero.getId().getFormaPagoId())
-        .terceroId(formaPagoTercero.getId().getTerceroId())
-        .fechaPago(formaPagoTercero.getFechaPago())
-        .build();
-  }
 }

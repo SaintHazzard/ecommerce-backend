@@ -18,12 +18,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.moufflet.ecommerce_backend.formaPagoTercero.application.FormaPagoTerceroService;
+import com.moufflet.ecommerce_backend.formaPagoTercero.model.FormaPagoTercero;
+import com.moufflet.ecommerce_backend.formaPagoTercero.model.FormaPagoTerceroId;
 import com.moufflet.ecommerce_backend.pedido.application.PedidoDTO;
 import com.moufflet.ecommerce_backend.pedido.application.PedidoRequest;
 import com.moufflet.ecommerce_backend.pedido.application.PedidoService;
 import com.moufflet.ecommerce_backend.pedido.model.EstadoPedido;
 import com.moufflet.ecommerce_backend.pedido.model.Pedido;
 import com.moufflet.ecommerce_backend.pedido.model.PedidoProducto;
+import com.moufflet.ecommerce_backend.tercero.application.TerceroService;
+import com.moufflet.ecommerce_backend.tercero.domain.Tercero;
 
 @RestController
 @RequestMapping("/admin/pedido")
@@ -31,6 +36,12 @@ public class PedidoController {
 
   @Autowired
   private PedidoService pedidoService;
+
+  @Autowired
+  FormaPagoTerceroService formaPagoTerceroService;
+
+  @Autowired
+  TerceroService terceroService;
 
   @PostMapping("/crear")
   public ResponseEntity<Pedido> createPedido(@RequestBody PedidoRequest pedidoRequest) {
@@ -56,7 +67,7 @@ public class PedidoController {
   }
 
   @PutMapping("/update/{id}")
-  public ResponseEntity<Pedido> updatePedido(@PathVariable Long id, @RequestBody Pedido pedido) {
+  public ResponseEntity<Pedido> updatePedido(@PathVariable Long id, @RequestBody PedidoDTO pedido) {
     Pedido updatedPedido = pedidoService.updatePedido(id, pedido);
     return new ResponseEntity<>(updatedPedido, HttpStatus.OK);
   }
@@ -88,6 +99,21 @@ public class PedidoController {
   }
 
   public PedidoDTO entityToDTO(Pedido pedido) {
+    if (pedido.getFormaPagoTercero() == null) {
+      return PedidoDTO.builder()
+          .id(pedido.getId())
+          .fechaPedido(pedido.getFechaPedido())
+          .fechaEsperada(pedido.getFechaEsperada())
+          .fechaEntrega(pedido.getFechaEntrega())
+          .estado(pedido.getEstado().name())
+          .comentarios(pedido.getComentarios())
+          .cliente("No asignado")
+          .build();
+    }
+    FormaPagoTercero formaPagoTercero = formaPagoTerceroService
+        .getById(new FormaPagoTerceroId(pedido.getFormaPagoTercero().getFormaPago().getId(),
+            pedido.getFormaPagoTercero().getTercero().getId()));
+    Tercero tercero = terceroService.getById(formaPagoTercero.getTercero().getId());
     return PedidoDTO.builder()
         .id(pedido.getId())
         .fechaPedido(pedido.getFechaPedido())
@@ -95,9 +121,7 @@ public class PedidoController {
         .fechaEntrega(pedido.getFechaEntrega())
         .estado(pedido.getEstado().name())
         .comentarios(pedido.getComentarios())
-        .cliente(pedido.getFormaPagoTercero().getTercero().getPrimerNombre() + " "
-            + pedido.getFormaPagoTercero().getTercero().getPrimerApellido())
-        .total(pedido.getTotal())
+        .cliente(tercero.getPrimerNombre() + " " + tercero.getPrimerApellido())
         .build();
   }
 

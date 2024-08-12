@@ -39,6 +39,7 @@ public class FormaPagoTerceroController {
   @PostMapping("/create")
   public ResponseEntity<FormaPagoTerceroDTO> guardarFormaPagoTercero(
       @RequestBody FormaPagoTerceroDTO formaPagoTerceroDTO) {
+    System.out.println("Forma de pago tercero: " + formaPagoTerceroDTO);
     return ResponseEntity.ok(formaPagoTerceroService.guardarFormaPagoTercero(formaPagoTerceroDTO));
   }
 

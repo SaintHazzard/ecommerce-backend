@@ -1,5 +1,6 @@
 package com.moufflet.ecommerce_backend.pedido.application;
 
+import static java.lang.Long.parseLong;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
@@ -7,6 +8,10 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.moufflet.ecommerce_backend.Formapago.application.FormaPagoService;
+import com.moufflet.ecommerce_backend.formaPagoTercero.application.FormaPagoTerceroService;
+import com.moufflet.ecommerce_backend.formaPagoTercero.model.FormaPagoTercero;
+import com.moufflet.ecommerce_backend.formaPagoTercero.model.FormaPagoTerceroId;
 import com.moufflet.ecommerce_backend.pedido.model.EstadoPedido;
 import com.moufflet.ecommerce_backend.pedido.model.Pedido;
 import com.moufflet.ecommerce_backend.pedido.model.PedidoProducto;
@@ -33,6 +38,9 @@ public class PedidoService {
   @Autowired
   private TerceroService terceroService;
 
+  @Autowired
+  private FormaPagoTerceroService formaPagoService;
+
   @Transactional
   public Pedido createPedido(PedidoDTO pedidoDTO, List<PedidoProductoDTO> productosDTO) {
     Pedido pedidoEntity = DTOtoEntity(pedidoDTO);
@@ -44,7 +52,7 @@ public class PedidoService {
     Pedido savedPedido = pedidoRepository.save(pedidoEntity);
     System.out.println("Pedido guardado: " + savedPedido);
     for (PedidoProductoDTO pedidoProductoDTO : productosDTO) {
-      PedidoProducto pedidoProductoEntity = mapPedidoProductoDTOToPedidoProducto(pedidoProductoDTO, savedPedido);
+      PedidoProducto pedidoProductoEntity = DTOtoEntity(pedidoProductoDTO, savedPedido);
       pedidoProductoRepository.save(pedidoProductoEntity);
     }
     return savedPedido;
@@ -62,15 +70,19 @@ public class PedidoService {
     pedidoRepository.deleteById(id);
   }
 
-  public Pedido updatePedido(Long id, Pedido updatedPedido) {
+  public Pedido updatePedido(Long id, PedidoDTO updatedPedido) {
+    System.out.println("Pedido a actualizar: " + updatedPedido);
     Optional<Pedido> existingPedido = pedidoRepository.findById(id);
+    FormaPagoTercero formaPagoTercero = formaPagoService
+        .getById(new FormaPagoTerceroId(Long.valueOf(updatedPedido.getFormaPagoId()), updatedPedido.getTerceroId()));
     if (existingPedido.isPresent()) {
       Pedido pedido = existingPedido.get();
       pedido.setFechaPedido(updatedPedido.getFechaPedido());
       pedido.setFechaEsperada(updatedPedido.getFechaEsperada());
       pedido.setFechaEntrega(updatedPedido.getFechaEntrega());
-      pedido.setEstado(updatedPedido.getEstado());
+      pedido.setEstado(EstadoPedido.valueOf(updatedPedido.getEstado()));
       pedido.setComentarios(updatedPedido.getComentarios());
+      pedido.setFormaPagoTercero(formaPagoTercero);
       return pedidoRepository.save(pedido);
     } else {
       throw new RuntimeException("Pedido no encontrado");
@@ -113,11 +125,10 @@ public class PedidoService {
         .fechaEntrega(pedido.getFechaEntrega())
         .estado(pedido.getEstado().name())
         .comentarios(pedido.getComentarios())
-        .cliente(terceroService.getById(pedido.getFormaPagoTercero().getTercero().getId()).getPrimerNombre())
         .build();
   }
 
-  private PedidoProducto mapPedidoProductoDTOToPedidoProducto(PedidoProductoDTO pedidoProductoDTO, Pedido pedido) {
+  private PedidoProducto DTOtoEntity(PedidoProductoDTO pedidoProductoDTO, Pedido pedido) {
     return PedidoProducto.builder()
         .cantidad(pedidoProductoDTO.getCantidad())
         .pedido(pedido)

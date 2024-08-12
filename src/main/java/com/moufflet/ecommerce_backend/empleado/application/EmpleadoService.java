@@ -41,7 +41,6 @@ public class EmpleadoService {
   @Value("${spring.datasource.password}")
   private String password;
 
-  @Transactional
   public Empleado save(EmpleadoDTO empleadoDTO) {
     Connection connection = null;
     PreparedStatement preparedStatement = null;
@@ -65,12 +64,11 @@ public class EmpleadoService {
         preparedStatement.setLong(4, empleadoDTO.getOficina());
         preparedStatement.executeUpdate();
 
-
         pstmt2.setLong(1, empleadoDTO.getOficina());
         pstmt2.setString(2, empleadoDTO.getId());
         pstmt2.executeUpdate();
 
-        conn.commit();
+        conn.close();
       } catch (SQLException e) {
         throw new RuntimeException(e);
       } finally {
@@ -87,7 +85,29 @@ public class EmpleadoService {
       }
     } else {
       Empleado empleado = fromDTO(empleadoDTO);
-      return empleadoRepositoryPort.save(empleado);
+      empleadoRepositoryPort.save(empleado);
+      String sql2 = "INSERT INTO oficina_empleados (oficina_id,empleados_id) VALUES (?,?)";
+      try (Connection conn = DriverManager.getConnection(url, user, password)) {
+        preparedStatement = conn.prepareStatement(sql2);
+        preparedStatement.setLong(1, empleadoDTO.getOficina());
+        preparedStatement.setString(2, empleadoDTO.getId());
+        preparedStatement.executeUpdate();
+        conn.commit();
+      } catch (SQLException e) {
+        throw new RuntimeException(e);
+      } finally {
+        try {
+          if (preparedStatement != null) {
+            preparedStatement.close();
+          }
+          if (connection != null) {
+            connection.close();
+          }
+        } catch (SQLException e) {
+          throw new RuntimeException(e);
+        }
+      }
+      return empleado;
     }
     return null;
   }
