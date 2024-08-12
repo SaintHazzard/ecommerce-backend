@@ -1,14 +1,17 @@
 package com.moufflet.ecommerce_backend.pedido.application;
 
-import static java.lang.Long.parseLong;
 import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.moufflet.ecommerce_backend.Formapago.application.FormaPagoService;
 import com.moufflet.ecommerce_backend.formaPagoTercero.application.FormaPagoTerceroService;
 import com.moufflet.ecommerce_backend.formaPagoTercero.model.FormaPagoTercero;
 import com.moufflet.ecommerce_backend.formaPagoTercero.model.FormaPagoTerceroId;
@@ -37,6 +40,13 @@ public class PedidoService {
 
   @Autowired
   private TerceroService terceroService;
+
+  @Value("${spring.datasource.url}")
+  private String url;
+  @Value("${spring.datasource.username}")
+  private String username;
+  @Value("${spring.datasource.password}")
+  private String password;
 
   @Autowired
   private FormaPagoTerceroService formaPagoService;
@@ -71,6 +81,7 @@ public class PedidoService {
   }
 
   public Pedido updatePedido(Long id, PedidoDTO updatedPedido) {
+
     System.out.println("Pedido a actualizar: " + updatedPedido);
     Optional<Pedido> existingPedido = pedidoRepository.findById(id);
     FormaPagoTercero formaPagoTercero = formaPagoService
@@ -83,8 +94,20 @@ public class PedidoService {
       pedido.setEstado(EstadoPedido.valueOf(updatedPedido.getEstado()));
       pedido.setComentarios(updatedPedido.getComentarios());
       pedido.setFormaPagoTercero(formaPagoTercero);
+      try (Connection conn = DriverManager.getConnection(url, username, password)) {
+        String query = "UPDATE pedido SET forma_pago_tercero_forma_pago_id = ?, forma_pago_tercero_tercero_id =? WHERE id = ?";
+        PreparedStatement preparedStatement = conn.prepareStatement(query);
+        preparedStatement.setLong(1, Long.parseLong(updatedPedido.getFormaPagoId()));
+        preparedStatement.setString(2, updatedPedido.getTerceroId());
+        preparedStatement.setLong(3, id);
+        preparedStatement.executeUpdate();
+      } catch (SQLException e) {
+        e.printStackTrace();
+      }
       return pedidoRepository.save(pedido);
-    } else {
+    } else
+
+    {
       throw new RuntimeException("Pedido no encontrado");
     }
   }
