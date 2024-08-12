@@ -17,5 +17,4 @@ import lombok.NoArgsConstructor;
 public class PedidoRequest {
   private PedidoDTO pedido;
   private List<PedidoProductoDTO> productos;
-
 }

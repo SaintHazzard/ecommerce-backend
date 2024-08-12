@@ -22,6 +22,7 @@ public class PedidoDTO {
   private String estado;
 
   private String comentarios;
-
+  private String cliente;
   private BigDecimal total;
+
 }

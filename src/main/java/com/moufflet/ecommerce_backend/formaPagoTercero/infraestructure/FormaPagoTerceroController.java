@@ -32,8 +32,7 @@ public class FormaPagoTerceroController {
   }
 
   @GetMapping("/getByTerceroId")
-  public ResponseEntity<List<FormaPagoTerceroDTO>> buscarPagoPorTercero(@RequestParam Long pedidoId,
-      @RequestParam String terceroId) {
+  public ResponseEntity<List<FormaPagoTerceroDTO>> buscarPagoPorTercero(@RequestParam String terceroId) {
     return ResponseEntity.ok(formaPagoTerceroService.buscarFormaPagoTerceroPorTerceroId(terceroId));
   }
 

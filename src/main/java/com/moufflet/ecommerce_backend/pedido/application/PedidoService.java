@@ -14,6 +14,7 @@ import com.moufflet.ecommerce_backend.pedido.model.PedidoProductoDTO;
 import com.moufflet.ecommerce_backend.pedido.model.PedidoProductoId;
 import com.moufflet.ecommerce_backend.producto.application.port.ProductoRepositoryPort;
 import com.moufflet.ecommerce_backend.producto.model.Producto;
+import com.moufflet.ecommerce_backend.tercero.application.TerceroService;
 
 import jakarta.transaction.Transactional;
 
@@ -28,6 +29,9 @@ public class PedidoService {
 
   @Autowired
   private PedidoProductoRepositoryPort pedidoProductoRepository;
+
+  @Autowired
+  private TerceroService terceroService;
 
   @Transactional
   public Pedido createPedido(PedidoDTO pedidoDTO, List<PedidoProductoDTO> productosDTO) {
@@ -109,6 +113,7 @@ public class PedidoService {
         .fechaEntrega(pedido.getFechaEntrega())
         .estado(pedido.getEstado().name())
         .comentarios(pedido.getComentarios())
+        .cliente(terceroService.getById(pedido.getFormaPagoTercero().getTercero().getId()).getPrimerNombre())
         .build();
   }
 
