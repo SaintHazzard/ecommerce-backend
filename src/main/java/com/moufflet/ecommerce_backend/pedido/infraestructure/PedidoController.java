@@ -95,6 +95,8 @@ public class PedidoController {
         .fechaEntrega(pedido.getFechaEntrega())
         .estado(pedido.getEstado().name())
         .comentarios(pedido.getComentarios())
+        .cliente(pedido.getFormaPagoTercero().getTercero().getPrimerNombre() + " "
+            + pedido.getFormaPagoTercero().getTercero().getPrimerApellido())
         .total(pedido.getTotal())
         .build();
   }
